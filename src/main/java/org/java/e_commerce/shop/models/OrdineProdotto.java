@@ -1,11 +1,13 @@
 package org.java.e_commerce.shop.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "ordine_prodotto")
 public class OrdineProdotto {
@@ -14,7 +16,6 @@ public class OrdineProdotto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "ordine_id", nullable = false)
     private Ordine ordine;

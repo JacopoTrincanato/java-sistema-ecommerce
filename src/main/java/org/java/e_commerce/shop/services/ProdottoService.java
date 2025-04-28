@@ -18,7 +18,14 @@ public class ProdottoService {
     @Autowired
     private ProdottoRepository prodottoRepository;
 
-    // metodi
+    /**
+     * Recupera tutti i prodotti attraverso prodottoRepository.findAll() e aggiunge
+     * una paginazione customizzata
+     * 
+     * @param numeroPagina
+     * @param elementiPagina
+     * @return tutti i prodotti impaginati
+     */
     public ProdottoPagination recuperaProdotti(int numeroPagina, int elementiPagina) {
         Pageable pageable = PageRequest.of(numeroPagina, elementiPagina);
         Page<Prodotto> prodotti = prodottoRepository.findAll(pageable);
