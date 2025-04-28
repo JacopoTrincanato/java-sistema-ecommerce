@@ -30,7 +30,14 @@ public class OrdineService {
     @Autowired
     private ClienteService clienteService;
 
-    // metodi
+    /**
+     * Recupera tutti gli ordini attraverso ordineRepository.findAll() e aggiunge
+     * una paginazione customizzata
+     * 
+     * @param numeroPagina
+     * @param elementiPagina
+     * @return l'impaginazione degli ordini
+     */
     public OrdinePagination recuperaOrdini(int numeroPagina, int elementiPagina) {
         Pageable pageable = PageRequest.of(numeroPagina, elementiPagina);
         Page<Ordine> ordini = ordineRepository.findAll(pageable);
@@ -45,10 +52,35 @@ public class OrdineService {
         return ordinePagination;
     }
 
+    /**
+     * Recupera il singolo ordine attraverso ordineRepository.findById(id)
+     * 
+     * @param id
+     * 
+     * @return l'ordine per id
+     */
     public Optional<Ordine> recuperaIdOrdine(Integer id) {
         return ordineRepository.findById(id);
     }
 
+    /**
+     * Permette l'aggiunta di un ordine attraverso
+     * ordineRepository.save(ordine)
+     * Recuper anche il cliente tramite
+     * clienteService.recuperaIdCliente(ordine.getCliente().getId()).orElse(null).
+     * Se è null non viene trovato e il prodotto tramite
+     * prodottoService.recuperaIdProdotto(prodottoOrdinato.getProdotto().getId()).orElse(null).
+     * Se è null non viene trovato
+     * 
+     * Diminuisce la quantità in stock del prodotto in caso di ordine effettuato
+     * correttamente
+     * 
+     * Permette di effettuare più ordini contemporaneamente grazie a @Transactional
+     * 
+     * @param ordine
+     * 
+     * @return aggiunta di un ordine
+     */
     @Transactional
     public Ordine aggiungiOrdine(Ordine ordine) {
         List<OrdineProdotto> prodottiDaOrdinare = ordine.getProdotti();
@@ -78,6 +110,13 @@ public class OrdineService {
         return ordineRepository.save(ordine);
     }
 
+    /**
+     * Metodo simile al precedente, ma utilizzato per aggiornare un ordine
+     * 
+     * @param ordine
+     * 
+     * @return aggiornamento di un ordine
+     */
     public Ordine aggiornaOrdine(Ordine ordine) {
         List<OrdineProdotto> prodottiDaOrdinare = ordine.getProdotti();
         Cliente cliente = clienteService.recuperaIdCliente(ordine.getCliente().getId()).orElse(null);
@@ -106,6 +145,14 @@ public class OrdineService {
         return ordineRepository.save(ordine);
     }
 
+    /**
+     * Elimina il singolo ordine, a meno che il suo stato non sia CONSEGNATO,
+     * attraverso ordineRepository.findById(id).get()
+     * 
+     * @param id
+     * 
+     * @return la cancellazione dell'ordine
+     */
     public void cancellaOrdine(Integer id) {
         Ordine ordine = ordineRepository.findById(id).get();
         if (ordine.getStatus() == StatoOrdine.CONSEGNATO) {

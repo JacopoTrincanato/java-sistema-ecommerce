@@ -24,7 +24,7 @@ public class ProdottoService {
      * 
      * @param numeroPagina
      * @param elementiPagina
-     * @return tutti i prodotti impaginati
+     * @return l'impaginazione dei prodotti
      */
     public ProdottoPagination recuperaProdotti(int numeroPagina, int elementiPagina) {
         Pageable pageable = PageRequest.of(numeroPagina, elementiPagina);
@@ -40,10 +40,25 @@ public class ProdottoService {
         return prodottoPagination;
     }
 
+    /**
+     * Recupera il singolo prodotto attraverso prodottoRepository.findById(id)
+     * 
+     * @param id
+     * 
+     * @return il prodotto per id
+     */
     public Optional<Prodotto> recuperaIdProdotto(Integer id) {
         return prodottoRepository.findById(id);
     }
 
+    /**
+     * Permette l'aggiunta di un prodotto attraverso
+     * prodottoRepository.save(prodotto)
+     * 
+     * @param prodotto
+     * 
+     * @return aggiunta di un prodotto
+     */
     public Prodotto aggiungiProdotto(Prodotto prodotto) {
         return prodottoRepository.save(prodotto);
     }

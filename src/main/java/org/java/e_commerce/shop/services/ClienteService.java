@@ -18,6 +18,14 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    /**
+     * Recupera tutti i clienti attraverso clienteRepository.findAll() e aggiunge
+     * una paginazione customizzata
+     * 
+     * @param numeroPagina
+     * @param elementiPagina
+     * @return l'impaginazione dei clienti
+     */
     public ClientePagination recuperaClienti(int numeroPagina, int elementiPagina) {
         Pageable pageable = PageRequest.of(numeroPagina, elementiPagina);
         Page<Cliente> clienti = clienteRepository.findAll(pageable);
@@ -32,10 +40,25 @@ public class ClienteService {
         return clientePagination;
     }
 
+    /**
+     * Recupera il singolo cliente attraverso clienteRepository.findById(id)
+     * 
+     * @param id
+     * 
+     * @return il cliente per id
+     */
     public Optional<Cliente> recuperaIdCliente(Integer id) {
         return clienteRepository.findById(id);
     }
 
+    /**
+     * Permette l'aggiunta di un cliente attraverso
+     * clienteRepository.save(cliente)
+     * 
+     * @param cliente
+     * 
+     * @return aggiunta di un cliente
+     */
     public Cliente aggiungiCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
