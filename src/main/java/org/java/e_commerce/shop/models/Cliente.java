@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
@@ -47,6 +48,7 @@ public class Cliente {
     @NotBlank(message = "il campo email non può essere vuoto o nullo")
     private String email;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Ordine> ordiniEffettuati;
 
